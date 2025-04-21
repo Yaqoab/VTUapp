@@ -1,0 +1,146 @@
+:root{
+  --green: #4a7672;
+  --textColor:#222;
+  --white:#fff;
+ }
+html body{
+  padding: 0;
+  margin: 0;
+}
+body{
+display: flex;
+min-height: 100vh;
+flex-direction: column;
+margin: 2rem auto;
+font-family: 'Nunito', sans-serif;
+}
+#main{
+flex: 1 0 auto;
+height: 100%;
+}
+
+/* ----loading spinner----- */
+.loading {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+  margin: 0 auto;
+  display: block; 
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+/*----------------USER HOME PAGE STYLE ------*/
+.showNavbar{
+  display: block;
+}
+.navbarHeader{
+  display: none;
+}
+@media (max-width: 576px) {
+    .showNavbar{
+    display: none;
+  }
+  .navbarHeader{
+    display: block;
+  }
+}
+.balance{
+    /* font-weight: bold; */
+    border-radius: 6px;
+    margin: 5px;
+    text-align: center;
+    background-color:#81aba6;
+  
+  }
+  .balance a, .balance .eye{
+    font-size:large;
+    color: #fffff7;
+  }
+  .balance .fonts,  
+  .services .fonts{
+    font-weight: bold;
+    font-size: 20px;
+  }
+  .services{
+    margin: 10px;
+    text-align: center;
+    border: 1px solid #ccf8f4;
+    border-radius: 6px;
+    background-color:#faf7f7;
+  }
+  .services a{
+    font-size:large;
+    color: #0e615a;
+    
+  }
+  .services .row div{
+    margin-bottom: 10px;
+    border-radius: 6px;
+  }
+ 
+/* ----------------------MORE PAGE STYLE---------------------- */
+.more .column div{
+  padding: 10px;
+  margin: 10px;
+  /* border: 1px solid rgb(219, 219, 219); */
+  border-left:3px solid var(--green);
+  background-color:#faf7f7;
+}
+.logout{
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+/*-------------- Custom CSS for the profile image ---------------*/
+.img-profile {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+
+}
+#loading{
+  display: none;
+}
+/* ----------------FORM BOX AND INPUTS STYLE -------------------- */
+.box input[type="text"],.box input[type="number"],.box .custom-file-label, .box input[type="password"] {
+  border: 1px solid #b0cdcb;
+  font-size: 16px;
+  border-radius: 50px;
+  -webkit-transition: all 0.1s linear;
+  -moz-transition: all 0.1s linear;
+  transition: all 0.1s linear;
+  background-color: #f6f7f7;
+  color: #384140;
+}
+.box .custom-file-label{
+border-right: none;
+}
+.input-group-text{
+border: 1px solid #b0cdcb;
+border-radius: 50px;
+}
+.box input[type="submit"], .box input[type="button"]{
+width:120px;
+margin: 0 auto;
+margin-top: 10px;
+background-color: #4a7672;
+border-radius: 50px;
+color: #fff;
+}
+
+.box select{
+  background-color:  #f6f7f7;
+  border-radius: 50px;
+  color: #384140;
+
+}
