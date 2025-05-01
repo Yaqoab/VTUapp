@@ -589,8 +589,11 @@ function updateCountDownDisplay(remainingCount) {
   notification(id){
     const notificationData=this.elementById('container');
     const load=this.loader();
+    const userId = id;
 
     load.style.display='block'
+
+    
     this.sendAndRequest(`./../user/pages/notification/processNotification.php?id=${id}`, 'GET','')
     .then(res=>{
       console.log(res);
@@ -600,18 +603,26 @@ function updateCountDownDisplay(remainingCount) {
       if (res.status === 'success') {
        
         res.message.forEach(notification=>{
+          let link = "#"; // default if type not matched
+
+          if (notification.type === 'transfer') {
+              link = `index.php?page=pages/transac_history/transactions&catname=${notification.type}&uId=${notification.user_id}&ref=${notification.reference}`;
+          } else if (notification.type === 'admin') {
+              link = `index.php?page=pages/deposit_history&ref=${notification.reference}`;
+          } else if (notification.type === 'airtime') {
+              link = `index.php?page=pages/airtime_history&ref=${notification.reference}`;
+          } else if (notification.type === 'admin') {
+              link = `#`; // Maybe admin messages have no link
+          }
+
           row.innerHTML +=`
           <div class="col-md-6 mx-auto mb-2">
-          <a href="index.php?page=pages/transac_history/${
-            notification.cat_name ==="transfer" ? "transfer" :
-            "adminnotification"}&ref=${notification.ref_id}
-            
-            " class="card-link">
+          <a href="${link}" class="card-link">
               <div class="card ${notification.is_read == 0 ? 'nofication-unread' : 'nofication-read'}">
                   <div class="card-body">
-                      <span class="h5 card-title">${notification.cat_name}</span><br>
+                      <span class="h5 card-title">${notification.type}</span><br>
                       <div class="card-text">${notification.message}</div>
-                      <i class="card-text">${notification.timestamp}</i>
+                      <i class="card-text">${notification.created_at}</i>
                   </div>
               </div>
           </a>

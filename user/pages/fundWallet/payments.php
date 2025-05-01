@@ -2,8 +2,8 @@
 require_once "./../classes/monifyClass.php";
 
 
-$api_key = "MK_TEST_S3ZK8R2KTH";
-$secret_key = "YVF4EFP0FH61S4PXMSWJXVUWBD1U1SYT";
+$api_key = $monnify_details['api'];
+$secret_key = $monnify_details['secret'];
 
 $monify = new MonifyToken($api_key, $secret_key);
 $accessToken = $monify->getAccessToken();

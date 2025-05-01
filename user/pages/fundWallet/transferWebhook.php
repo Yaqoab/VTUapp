@@ -13,7 +13,8 @@
   $raw_request = file_get_contents('php://input');
   
   // your Secret Key found in your Monnify dashboard, developer menu
-  $SECRET_KEY = 'YVF4EFP0FH61S4PXMSWJXVUWBD1U1SYT';
+  $SECRET_KEY = $monnify_details['secret'];
+
   
   // next, we need to compute and compare the hash sent via the header as "monnify-signature"
   $signature = $_SERVER['HTTP_MONNIFY_SIGNATURE'];
@@ -37,7 +38,7 @@
   $eml = $user['email'];
   $data = ['accountReference' => $request_array];
   
-  $act->update('users', $data, "email=" . $eml);
+  $act->update('users', $data, "email='$eml'");
   
 
 

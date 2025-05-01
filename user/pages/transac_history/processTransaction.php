@@ -8,34 +8,38 @@
 if (isset($_GET['catname'])) {
     $catName       = $_GET['catname'];
     $userId        = $_GET['uId'];
-    $transactionId = $_GET['trId'];    
+    $reference = $_GET['ref'];    
 }
  if ($catName === "data") {
-    $data = $getDetails->select('data_history','*',"dt_id='$transactionId'");
+    $data = $getDetails->select('data_history','*',"reference='$reference'");
     $response=[
         'category'=>$catName,
          'details'=>$data
     ];
  }elseif($catName === "airtime"){
-    $data = $getDetails->select('airtime_history','*',"air_id='$transactionId'");
+    $data = $getDetails->select('airtime_history','*',"reference='$reference'");
     $response=[
         'category'=>$catName,
          'details'=>$data
     ];
  }elseif ($catName === "transfer") {
-    $data = $getDetails->select('transfer','*',"transfer_id='$transactionId'");
-    $response=[
+  $notifiData = ['is_read' => 1];
+   $getDetails->join('users s','INNER JOIN', 't.sender_id = s.user_id');
+   $getDetails->join('users r',' INNER JOIN', 't.receiver_id = r.user_id');
+   $data=$getDetails->select("transfer t","t.*, s.phone AS senderAcc, s.username AS senderName, r.phone AS receiverAcc, r.username AS receiverName","t.reference='$reference'");
+     $getDetails->update('notification',$notifiData,"type='transfer' AND reference='$reference'");
+   $response=[
         'category'=>$catName,
          'details'=>$data
     ];
  }elseif ($catName === "electricity") {
-   $data = $getDetails->select('electric_history','*',"e_id='$transactionId'");
+   $data = $getDetails->select('electric_history','*',"reference='$reference'");
     $response=[
         'category'=>$catName,
          'details'=>$data
     ];
  }else {
-   $data = $getDetails->select('tvcable_history','*',"t_id='$transactionId'");
+   $data = $getDetails->select('tvcable_history','*',"reference='$reference'");
    $response=[
     'category'=>$catName,
      'details'=>$data

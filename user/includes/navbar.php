@@ -10,9 +10,9 @@
   $user=$Users->select("users","*","user_id='$userId'");
   // count user notifications
   $count = $Users->count(
-    "notifications",
+    "notification",
     "is_read",
-    "receiver_id ='$userId' AND is_read=0 OR receiver_id IS NULL "
+    "user_id ='$userId' AND is_read=0 OR user_id IS NULL "
   );
 
   $monnify_details=$Users->select("monnifyData","*","id=1");

@@ -3,6 +3,9 @@
   require_once '../../../db_connect.php';
   
   $usersDetails=new Actions;
+  function generateTransactionReference() {
+    return 'TXN-' . strtoupper(substr(md5(uniqid(mt_rand(), true)), 0, 10));
+}
   // get preview user data that display before transfer
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if(isset($_GET['id'])){
@@ -20,9 +23,10 @@
     $amount=trim($_POST['amount']);
     $remark=trim($_POST['remark']);
     $pin=trim($_POST['pin']);
+    $reference = generateTransactionReference();
 
     $senderDetails=$usersDetails->select('users','balance,pin',"user_id='$senderId'");
-    $recieverDetails=$usersDetails->select('users','balance',"user_id='$receiverId'");
+    $recieverDetails=$usersDetails->select('users','balance,username',"user_id='$receiverId'");
 
     $hashPin=$senderDetails['pin'];
      $errors=[];
@@ -60,22 +64,30 @@
       
       if ($isSent && $isReceived) {
          $transData=[
+          'cat_id'=> 3,
           'sender_id'=>$senderId,
           'receiver_id'=>$receiverId,
           'amount'=>$amount,
           'remark'=>$remark,
-          'status'=>'success'
+          'status'=>'success',
+          'reference' => $reference
          ];
          $usersDetails->addDataToDatabase("transfer",$transData);
           $lastId=$connect->lastInsertId();
-          $notificationData=[
-            'sender_id'=>$senderId,
-            'receiver_id'=>$receiverId,
-            'ref_id'=>$lastId,
-            'cat_id'=>3,
-            'message'=>'Balance received from '.$get_user['username']
+          $senerNotification=[
+            'user_id'=>$senderId,
+            'message'=>'Balance sent to '.$recieverDetails['username'],
+            'type' => 'transfer',
+            'reference'=>$reference
           ];
-          $usersDetails->addDataToDatabase("notifications",$notificationData);
+          $recieverNotification=[
+            'user_id'=>$receiverId,
+            'message'=>'Balance received from '.$get_user['username'],
+            'type' => 'transfer',
+            'reference'=>$reference
+          ];
+          $usersDetails->addDataToDatabase("notification",$senerNotification);
+          $usersDetails->addDataToDatabase("notification",$recieverNotification);
           $response = [
               'status' => 'success',
               'message' => 'Transfer successful',

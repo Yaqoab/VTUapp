@@ -30,21 +30,125 @@ const sendRequest = async (method, endPoint, data = null) => {
     }
   };
 
-  loading = document.getElementById('loading')
-  loading.style.display='block'
+  const container  = document.getElementById("container");
+     const    loading   = document.getElementById("loading");
+         loading.style.display='block'
    const URLParams = new URLSearchParams(window.location.search);
    const catName   = URLParams.get('catname');
-   const userId    = URLParams.get('uId');
-   const transacId = URLParams.get('trId');
-   console.log(transacId);
+  //  const userId    = URLParams.get('uId');
+   const ref = URLParams.get('ref');
+   
+ 
   async function displayTransaction(){
+    // container.innerHTML = "";
  try {
-    const res = await sendRequest("GET",`./../user/pages/transac_history/processTransaction.php?catname=${catName}&uId=${userId}&trId=${transacId}`,);
-    loading.style.display='none'
-    console.log(res);
-    if (res.category === 'data') {
-        
+    const res = await sendRequest("GET",`./../user/pages/transac_history/processTransaction.php?catname=${catName}&ref=${ref}`,);
+    loading.style.display='none';
+    const data=res.details;
+    console.log(data);
+    if (res.category === 'data') {  
+        container.innerHTML =   `
+              <div class="w-100 position-relative">
+                <span class="h4 card-title" id="transfertitle">${res.category}</span>
+            </div>
+            <hr>
+            <h5 class="card-title">Transaction Details</h5>
+            <p class="card-text"><strong>Status:</strong> <span>${data.status}</span></p>
+            <p class="card-text"><strong>phone number:</strong> <span>${data.phone}</span></p>
+            <p class="card-text"><strong>Plan type:</strong> <span>${data.plan_type}</span></p>
+            <p class="card-text"><strong>Plan size:</strong> <span>${data.data_plan}</span></p>
+            <p class="card-text"><strong>Network:</strong> <span>${data.network}</span></p>
+            <p class="card-text"><strong>Date:</strong> <span>${data.date}</span></p>
+            <p class="card-text"><strong>ref:</strong> <span>${data.reference}</span></p>
+            </div>
+            <div class="card-footer text-muted">
+                Thank you for using our service!
+            </div>
+                `;
+                return;
+    }if(res.category === "airtime") {
+              container.innerHTML =   `
+              <div class="w-100 position-relative">
+              <span class="h4 card-title" id="transfertitle">${res.category}</span>
+            </div>
+            <hr>
+            <h5 class="card-title">Transaction Details</h5>
+            <p class="card-text"><strong>Status:</strong> <span>${data.status}</span></p>
+            <p class="card-text"><strong>phone number:</strong> <span>${data.phone}</span></p>
+            <p class="card-text"><strong>Network:</strong> <span>${data.network}</span></p>
+            <p class="card-text"><strong>Date:</strong> <span>${data.date}</span></p>
+            <p class="card-text"><strong>ref:</strong> <span>${data.reference}</span></p>
+            </div>
+            <div class="card-footer text-muted">
+                Thank you for using our service!
+            </div> `;
+                return;
+    }if (res.category === "transfer") {
+      const amountVal=data.sender_id == id ? `- ₦${data.amount}` :`+ ₦${data.amount}`;
+      const title=data.sender_id == id ? `Sent` :`Recieved`;
+            container.innerHTML =   `
+            <div class="w-100 position-relative">
+            <span class="h4 card-title">${res.category} ${title}</span>
+            <span class="card-text position-absolute" style="right:0" id="amount">${amountVal}</span>
+          </div>
+          <hr>
+          <h5 class="card-title">Transaction Details</h5>
+          <p class="card-text"><strong>Status:</strong> <span>${data.status}</span></p>
+          <p class="card-text"><strong>Sender:</strong> <span>${data.senderName}</span></p>
+          <p class="card-text"><strong>Reciever:</strong> <span>${data.receiverName}</span></p>
+          <p class="card-text"><strong>Sender account:</strong> <span>${data.senderAcc}</span></p>
+          <p class="card-text"><strong>Reciever account:</strong> <span>${data.receiverAcc}</span></p>
+          <p class="card-text"><strong>Remark:</strong> <span>${data.remark}</span></p>
+          <p class="card-text"><strong>Date:</strong> <span>${data.date}</span></p>
+          <p class="card-text"><strong>ref:</strong> <span>${data.reference}</span></p>
+          </div>
+          <div class="card-footer text-muted">
+              Thank you for using our service!
+          </div>`;
+              return;
+    }if (res.category === "electricity") {
+            container.innerHTML =   `
+            <div class="w-100 position-relative">
+            <span class="h4 card-title">${res.category}</span>
+          </div>
+          <hr>
+          <h5 class="card-title">Transaction Details</h5>
+          <p class="card-text"><strong>Status:</strong> <span>${data.status}</span></p>
+          <p class="card-text"><strong>Customer Name:</strong> <span>${data.customer_name}</span></p>
+          <p class="card-text"><strong>Distributor:</strong> <span>${data.distributor}</span></p>
+          <p class="card-text"><strong>Meter Number:</strong> <span>${data.meter_number}</span></p>
+          <p class="card-text"><strong>Meter Type:</strong> <span>${data.meter_type}</span></p>
+          <p class="card-text"><strong>Purchased code:</strong> <span>${data.purchased_code}</span></p>
+          <p class="card-text"><strong>Amount:</strong> <span>${data.amount}</span></p>
+          <p class="card-text"><strong>Date:</strong> <span>${data.date}</span></p>
+          <p class="card-text"><strong>Ref:</strong> <span>${data.reference}</span></p>
+          </div>
+          <div class="card-footer text-muted">
+              Thank you for using our service!
+          </div>`;
+              return;
+    } else {
+            container.innerHTML =   `
+            <div class="w-100 position-relative">
+            <span class="h4 card-title">${res.category}</span>
+          </div>
+          <hr>
+          <h5 class="card-title">Transaction Details</h5>
+          <p class="card-text"><strong>Status:</strong> <span>${data.status}</span></p>
+          <p class="card-text"><strong>Customer Name:</strong> <span>${data.customer_name}</span></p>
+          <p class="card-text"><strong>Cable name:</strong> <span>${data.cable_name}</span></p>
+          <p class="card-text"><strong>Cable Number:</strong> <span>${data.cable_number}</span></p>
+          <p class="card-text"><strong>Cable Plan:</strong> <span>${data.cable_plan}</span></p>
+          <p class="card-text"><strong>Amount:</strong> <span>${data.amount}</span></p>
+          <p class="card-text"><strong>Date:</strong> <span>${data.date}</span></p>
+          <p class="card-text"><strong>Ref:</strong> <span>${data.reference}</span></p>
+          </div>
+          <div class="card-footer text-muted">
+              Thank you for using our service!
+          </div>`;
+              return;
     }
+    
  } catch (error) {
     console.error(error);
  }

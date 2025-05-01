@@ -23,37 +23,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         if ($catId === 'all') {
             // Fetch all categories
             
-            $query = "SELECT dt_id AS id, 'data' AS category, cat_id, user_id, date, amount, status, NULL AS transaction_type
+            $query = "SELECT dt_id AS id, 'data' AS category, cat_id, user_id, date, amount, status, reference, NULL AS transaction_type
                 FROM data_history
                 WHERE user_id='$userId'
                 
                 UNION ALL
                 
-                SELECT t_id AS id, 'tv_Cable' AS category, cat_id, user_id, date, amount, status, NULL AS transaction_type
+                SELECT t_id AS id, 'tv_Cable' AS category, cat_id, user_id, date, amount, status, reference, NULL AS transaction_type
                 FROM tvcable_history
                 WHERE user_id='$userId'
                 
                 UNION ALL
                 
-                SELECT air_id AS id, 'airtime' AS category, cat_id, user_id, date, amount, status, NULL AS transaction_type
+                SELECT air_id AS id, 'airtime' AS category, cat_id, user_id, date, amount, status, reference, NULL AS transaction_type
                 FROM airtime_history
                 WHERE user_id='$userId'
                 
                 UNION ALL 
                 
-                SELECT e_id AS id, 'electricity' AS category, cat_id, user_id, date, amount, status, NULL AS transaction_type
+                SELECT e_id AS id, 'electricity' AS category, cat_id, user_id, date, amount, status, reference, NULL AS transaction_type
                 FROM electric_history
                 WHERE user_id='$userId'
                 
                 UNION ALL 
                 
-                SELECT transfer_id AS id, 'transfer' AS category, cat_id, sender_id AS user_id, date, amount, status, 'Sent' AS transaction_type
+                SELECT transfer_id AS id, 'transfer' AS category, cat_id, sender_id AS user_id, date, amount, status, reference, 'Sent' AS transaction_type
                 FROM transfer
                 WHERE sender_id='$userId'
                 
                 UNION ALL 
                 
-                SELECT transfer_id AS id, 'transfer' AS category, cat_id, receiver_id AS user_id, date, amount, status, 'Received' AS transaction_type
+                SELECT transfer_id AS id, 'transfer' AS category, cat_id, receiver_id AS user_id, date, amount, status, reference, 'Received' AS transaction_type
                 FROM transfer
                 WHERE receiver_id='$userId'
                 ORDER BY date DESC LIMIT $limit OFFSET $offset";
@@ -87,19 +87,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $tableMapping = [
                 '1' => [
                     'table' => 'data_history',
-                    'columns' => "dt_id AS id, 'data' AS category, cat_id, user_id, date, amount, status, NULL AS transaction_type
+                    'columns' => "dt_id AS id, 'data' AS category, cat_id, user_id, date, amount, status, reference, NULL AS transaction_type
                     ",
                     'condition' => "user_id = $userId"
                 ],
                 '2' => [
                     'table' => 'airtime_history',
-                    'columns' => "air_id AS id, 'airtime' AS category, cat_id, user_id, date, amount, status, NULL AS transaction_type
+                    'columns' => "air_id AS id, 'airtime' AS category, cat_id, user_id, date, amount, status, reference, NULL AS transaction_type
                    ",
                     'condition' =>  "user_id = $userId"
                 ],
                 '3' => [
                     'table' => 'transfer',
-                    'columns' => "transfer_id AS id, 'transfer' AS category, cat_id, sender_id AS user_id, date, amount, status, 
+                    'columns' => "transfer_id AS id, 'transfer' AS category, cat_id, sender_id AS user_id, date, amount, status, reference, 
                                   CASE 
                                       WHEN sender_id =  $userId THEN 'Sent'
                                       WHEN receiver_id =  $userId THEN 'Received'
@@ -108,13 +108,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 ],
                 '4' => [
                     'table' => 'electric_history',
-                    'columns' => "e_id AS id, 'electricity' AS category, cat_id, user_id, date, amount, status, NULL AS transaction_type
+                    'columns' => "e_id AS id, 'electricity' AS category, cat_id, user_id, date, amount, status, reference, NULL AS transaction_type
                     ",
                     'condition' => "user_id = $userId"
                 ],
                 '5' => [
                     'table' => 'tvcable_history',
-                    'columns' => "t_id AS id, 'tv_Cable' AS category, cat_id, user_id, date, amount, status, NULL AS transaction_type
+                    'columns' => "t_id AS id, 'tv_Cable' AS category, cat_id, user_id, date, amount, status, reference, NULL AS transaction_type
                     ",
                     'condition' => "user_id = $userId"
                 ],
