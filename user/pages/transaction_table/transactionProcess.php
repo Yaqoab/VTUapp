@@ -56,6 +56,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                 SELECT transfer_id AS id, 'transfer' AS category, cat_id, receiver_id AS user_id, date, amount, status, reference, 'Received' AS transaction_type
                 FROM transfer
                 WHERE receiver_id='$userId'
+
+                UNION ALL 
+                
+                SELECT dep_id AS id, 'deposit' AS category, cat_id, user_id, date, amount, status, reference, NULL AS transaction_type
+                FROM deposit_history
+                WHERE user_id='$userId'
                 ORDER BY date DESC LIMIT $limit OFFSET $offset";
 
                 // This will count all the rows your union returns, without LIMIT
@@ -72,6 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             SELECT 1 FROM transfer WHERE sender_id='$userId'
             UNION ALL
             SELECT 1 FROM transfer WHERE receiver_id='$userId'
+            UNION ALL
+            SELECT 1 FROM deposit_history WHERE user_id='$userId'
         ) AS combined_data";
 
         $totalResult = $processData->select("RAW_QUERY", $countQuery, "", "fetch");
@@ -118,6 +126,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                     ",
                     'condition' => "user_id = $userId"
                 ],
+                '6' => [
+                    'table' => 'deposit_history',
+                    'columns' => "dep_id AS id, 'deposit' AS category, cat_id, user_id, date, amount, status, reference, NULL AS transaction_type
+                    ",
+                    'condition' => "user_id = $userId"
+                ],
             ];
 
             switch ($catId) {
@@ -143,6 +157,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         ) AS t
                     ";
                     break;
+                    case '6':
+                        $countQuery = "SELECT COUNT(*) AS total FROM deposit_history WHERE user_id='$userId'";
+                        break;
                 default:
                     $countQuery = "SELECT 0 AS total"; // fallback
                     break;

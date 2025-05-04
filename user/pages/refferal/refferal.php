@@ -8,7 +8,7 @@
         $currentURL .= "s";
     }
     // referral link the i get user from navbar page
-    $referralURL .= "://$_SERVER[HTTP_HOST]/vtuApp/register.php?referral=$user[phone]";
+    $referralURL .= "://$_SERVER[HTTP_HOST]/vtuApp/register.php?referral=$user[referral_code]";
 
     $get_referrals=new Actions;
     // $refferrals=$get_referrals->select("referrals","*","referrer_id=$userId");

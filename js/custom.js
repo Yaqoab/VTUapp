@@ -69,11 +69,12 @@ class LoginAndRegister extends DomManipulator{
     register(){
         const form=this.elementById('form');
         const load=this.loader();
-        const usernameErr=this.elementById('usernameErr');
-        const emailErr=this.elementById('emailErr');
-        const phoneErr=this.elementById('phoneErr');
-        const passwordErr=this.elementById('passwordErr');
-        const confirmErr=this.elementById('confirmErr');
+        const usernameErr     = this.elementById('usernameErr');
+        const emailErr        = this.elementById('emailErr');
+        const phoneErr        = this.elementById('phoneErr');
+        const passwordErr     = this.elementById('passwordErr');
+        const confirmErr      = this.elementById('confirmErr');
+        const errReferralCode = this.elementById('errReferralCode');
         const urlParams=new URLSearchParams(window.location.search)
         const token=urlParams.get('referral')
 
@@ -96,14 +97,16 @@ class LoginAndRegister extends DomManipulator{
                 usernameErr.textContent='';
                 emailErr.textContent='';
                 phoneErr.textContent='';
+                errReferralCode.textContent='';
                 passwordErr.textContent='';
                 confirmErr.textContent='';
             }else{
-              usernameErr.textContent=res.message.username;
-              emailErr.textContent=res.message.email;
-              phoneErr.textContent=res.message.phone;
-              passwordErr.textContent=res.message.password;
-              confirmErr.textContent=res.message.confirm;
+              usernameErr.textContent     = res.message.username;
+              emailErr.textContent        = res.message.email;
+              phoneErr.textContent        = res.message.phone;
+              errReferralCode.textContent = res.message.referred_by;
+              passwordErr.textContent     = res.message.password;
+              confirmErr.textContent      = res.message.confirm;
             }
           
            })
@@ -255,14 +258,6 @@ class MyApp extends LoginAndRegister{
     const pin=this.elementById('pinErr')
     const confirm=this.elementById('confirmErr');
     const load=this.loader();
-
-    // this.sendAndRequest(`./../user/pages/settings/phpfiles/newPin.php?id=${id}`,"GET","")
-    // .then(res=>{
-    //   // console.log(res);
-    //   if (res.status === "success" && res.message ==="") {
-    //     alertify.success("update your password");
-    //   }
-    // });
 
    form.addEventListener('submit',(e)=>{
       e.preventDefault();
@@ -605,7 +600,7 @@ function updateCountDownDisplay(remainingCount) {
         res.message.forEach(notification=>{
           let link = "#"; // default if type not matched
 
-          if (notification.type === 'transfer') {
+          if (notification.type === 'transfer' || notification.type === 'deposit') {
               link = `index.php?page=pages/transac_history/transactions&catname=${notification.type}&uId=${notification.user_id}&ref=${notification.reference}`;
           } else if (notification.type === 'admin') {
               link = `index.php?page=pages/deposit_history&ref=${notification.reference}`;
@@ -639,42 +634,42 @@ function updateCountDownDisplay(remainingCount) {
     });
   }
   // ------------------ transfer reciept-------------------
-  transferReciept(id){
-    const transferTitle=this.elementById('transfertitle');
-    const statuss=this.elementById('status');
-    const sender=this.elementById('sender');
-    const receiver=this.elementById('receiver');
-    const senderAcc=this.elementById('senderacc');
-    const remark=this.elementById('remark');
-    const receiverAcc=this.elementById('receiveracc');
-    const date=this.elementById('date');
-    const amount=this.elementById('amount');
+  // transferReciept(id){
+  //   const transferTitle=this.elementById('transfertitle');
+  //   const statuss=this.elementById('status');
+  //   const sender=this.elementById('sender');
+  //   const receiver=this.elementById('receiver');
+  //   const senderAcc=this.elementById('senderacc');
+  //   const remark=this.elementById('remark');
+  //   const receiverAcc=this.elementById('receiveracc');
+  //   const date=this.elementById('date');
+  //   const amount=this.elementById('amount');
 
-    const urlParams=new URLSearchParams(window.location.search)
-    const ref=urlParams.get('ref')
+  //   const urlParams=new URLSearchParams(window.location.search)
+  //   const ref=urlParams.get('ref')
     
-    this.sendAndRequest(`./../user/pages/transac_history/phpFiles/processTransfer.php?user_id=${id}&ref_id=${ref}`, 'GET','')
-    .then(res=>{
-      console.log(res);
-        if (res.status === 'success') {
-             const val=res.message;
-             const amountVal=val.sender_id == id ? `- ₦${val.amount}` :`+ ₦${val.amount}`;
-             const title=val.sender_id == id ? `Send` :`Recieved`;
+  //   this.sendAndRequest(`./../user/pages/transac_history/phpFiles/processTransfer.php?user_id=${id}&ref_id=${ref}`, 'GET','')
+  //   .then(res=>{
+  //     console.log(res);
+  //       if (res.status === 'success') {
+  //            const val=res.message;
+  //            const amountVal=val.sender_id == id ? `- ₦${val.amount}` :`+ ₦${val.amount}`;
+  //            const title=val.sender_id == id ? `Send` :`Recieved`;
 
-            transferTitle.textContent=title;
-            amount.textContent=amountVal;
-            statuss.textContent=val.status;
-            sender.textContent=val.senderName;
-            receiver.textContent=val.receiverName;
-            senderAcc.textContent=val.senderAcc;
-            receiverAcc.textContent=val.receiverAcc;
-            remark.textContent=val.remark;
-            date.textContent=val.timestamp;
+  //           transferTitle.textContent=title;
+  //           amount.textContent=amountVal;
+  //           statuss.textContent=val.status;
+  //           sender.textContent=val.senderName;
+  //           receiver.textContent=val.receiverName;
+  //           senderAcc.textContent=val.senderAcc;
+  //           receiverAcc.textContent=val.receiverAcc;
+  //           remark.textContent=val.remark;
+  //           date.textContent=val.timestamp;
 
-        }
-    });
+  //       }
+  //   });
     
 
-  }
+  // }
 }
 

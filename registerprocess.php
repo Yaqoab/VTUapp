@@ -4,27 +4,20 @@
  require_once "./classes/monifyClass.php";
  
  $addData=new Actions();
- 
+ function generateReferralCode($prefix = 'REF') {
+  return $prefix . strtoupper(substr(md5(uniqid()), 0, 6));
+}
+
  if ($_SERVER["REQUEST_METHOD"] === "POST") {
  
     $data=[
         'username'=>$_POST['username'],
         'email'=>$_POST['email'],
         'phone'=>$_POST['phone'],
+        'referred_by'=>$_POST['referralCode'],
         'unHashPassword'=>$_POST['password'],
         'confirm'=>$_POST['confirm']
     ];
-      
-    // $referred_by = ($_POST['referred_by'] === null) ? $referred_by="" : $referred_by=$_POST['referred_by'] ;
-    $referred_by="";
-    $get_referred_by=$_POST['referred_by'];
-    
-    $referred_by=($get_referred_by === "null") ? $referred_by="" : $referred_by=$get_referred_by;
-    // if ($get_referred_by === 'null') {
-    //   $as="";
-    // }else{
-    //   $as=$vr;
-    // }
 
     $nameParts = explode(' ', $data['username']);
     $nameParts[0];
@@ -91,36 +84,45 @@
                     
                     $getData=$validator->getData();
                     $getData['accountReference']= $data2["responseBody"]["accountReference"];
+                    $getData['referral_code'] = generateReferralCode();
+                    
 
-                     $referalData=[
-                        'deposited'=>0,
-                        'referral_date'=>$date_time
-                      ];
-                   
-                    if (!empty($referred_by)) {
-                      $referrerUserData=$addData->select("users","*","phone=$referred_by");
-                      $getData['referred_by']=$referrerUserData['user_id'];
-                      $referalData['referrer_id']=$referrerUserData['user_id'];
-                    }else{
-                      $getData['referred_by']="";
-                      $referalData['referrer_id']="";
-                    }
-                    
-                     $addData->addDataToDatabase("users",$getData);
-                    $referalData['referee_id']=$connect->lastInsertId();
-                   
-                  if (!empty($referalData['referrer_id'])) {
-                    $addData->addDataToDatabase("referrals",$referalData);
-                  }
-                  
-                    
-                $response=array(
+                      // Insert new user
+                      $addData->addDataToDatabase("users", $getData);
+                      $referee_id = $connect->lastInsertId();
+
+                      // Check if referral code was used and is valid
+                      if (!empty($data['referred_by'])) {
+                          $referrer = $addData->select("users", "*", "referral_code = '{$data['referred_by']}'");
+                          
+                          if ($referrer) {
+                              $referrer_id = $referrer['user_id'];
+                              $referralData = [
+                                  'referrer_id' => $referrer_id,
+                                  'referee_id' => $referee_id,
+                                  'deposited' => 0,
+                                  'commission' => 0,
+                                  'referral_date' => $date_time
+                              ];
+                              $addData->addDataToDatabase("referrals", $referralData);
+                          }
+                      }
+
+                     
+
+                $response = array(
                   "status"=>'success',
                   "message"=>"registered successfully",
                   "data"=>$getData,
-                  "r"=>$referalData
                 );
-              } 
+              } else {
+                // Monnify failed, so respond with error
+                $response = array(
+                  "status" => "error",
+                  "message" => "Monnify failed to reserve account",
+                  "raw_response" => $data2
+                );
+             }
     }else{
       $err=$validator->getErrors();
       $response=array(

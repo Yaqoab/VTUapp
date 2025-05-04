@@ -3,6 +3,7 @@
   require_once '../../../db_connect.php';
 
   $getDetails = new Actions;
+  $notifiData = ['is_read' => 1];
    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
    
 if (isset($_GET['catname'])) {
@@ -23,11 +24,10 @@ if (isset($_GET['catname'])) {
          'details'=>$data
     ];
  }elseif ($catName === "transfer") {
-  $notifiData = ['is_read' => 1];
    $getDetails->join('users s','INNER JOIN', 't.sender_id = s.user_id');
    $getDetails->join('users r',' INNER JOIN', 't.receiver_id = r.user_id');
    $data=$getDetails->select("transfer t","t.*, s.phone AS senderAcc, s.username AS senderName, r.phone AS receiverAcc, r.username AS receiverName","t.reference='$reference'");
-     $getDetails->update('notification',$notifiData,"type='transfer' AND reference='$reference'");
+     $getDetails->update('notification',$notifiData,"user_id='$userId' AND reference='$reference'");
    $response=[
         'category'=>$catName,
          'details'=>$data
@@ -38,7 +38,15 @@ if (isset($_GET['catname'])) {
         'category'=>$catName,
          'details'=>$data
     ];
- }else {
+ }elseif ($catName === "deposit") {
+  $data = $getDetails->select('deposit_history','*',"reference='$reference'");
+  $getDetails->update('notification',$notifiData,"user_id='$userId' AND reference='$reference'");
+   $response=[
+       'category'=>$catName,
+        'details'=>$data
+   ];
+}
+ else {
    $data = $getDetails->select('tvcable_history','*',"reference='$reference'");
    $response=[
     'category'=>$catName,

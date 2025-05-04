@@ -163,7 +163,7 @@ public function update($table, $data, $condition) {
     }
 }
 // ----------VALIDATION CLASS  FOR REGISTER AND SETTINGS SECTIONS----------//
-class Validation{
+class Validation extends Actions{
    private $data;
    private $db;
    private $errors;
@@ -178,6 +178,7 @@ class Validation{
        $this->userName();
        $this->validateEmail();
        $this->validatePhone();
+       $this->validateRefferal();
        $this->validatePassword();
        $this->confirmPassword();
 
@@ -251,7 +252,21 @@ class Validation{
     
         }
      }
-     
+    private function validateRefferal(){
+        $referred_by = $this->data['referred_by'];
+        $query = "SELECT phone, email FROM `users` WHERE `referral_code`=:referred_by";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam('referred_by', $referred_by);
+        $stmt->execute();
+         $referrerUserData   = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$referrerUserData) {
+            $this->addError('referred_by','Invalid referral code. '.$referred_by);
+        }
+        if ($referrerUserData && $referrerUserData['email'] === $this->data['email']) {
+            $this->addError('referred_by','You cannot refer yourself.');
+        }
+        
+     }
      private function validatePassword(){
         $Password=$this->data['unHashPassword'];
         // $uppercase=preg_match('@[A-Z]@', $Password);

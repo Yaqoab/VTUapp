@@ -1,24 +1,3 @@
-<?php 
-    //   require_once './db_connect.php';
-    //   require_once "./classes/actions.php";
-
-	//   $addData=new Actions();
-    //   if (isset($_GET['referral'])) {
-	// 	$date=date('Y-m-d');
-	// 	$time=date('h:i:sa');
-	// 	$date_time=$date.' / '.$time;
-
-	// 	$code=$_GET['referral'];
-	// 	$getReferralUser=$addData->select("users","*","phone ='$code'");
-	// 	$ref=[
-	// 	  'referrer_id'=>$getReferralUser['user_id'],
-	// 	  'referee_id'=>'invited id',
-	// 	  'deposited'=>0,
-	// 	  'referral_date'=>$date_time
-	// 	];
-	// 	$addData->addDataToDatabase("referrals",$ref);
-	//   }
-?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -104,6 +83,11 @@
 											<label class="icon-lp"><i class="fa fa-phone"></i></label>
 											<input type="phone" name="phone" id="phone" tabindex="1" class="form-control" placeholder="Phone Number" value="<?php echo isset($phone) ? $phone:''?>">
 											<span id="phoneErr" class="text-danger"></span>
+										</div>
+										<div class="form-group">
+											<label class="icon-lp"><i class="fa fa-gift"></i></label>
+											<input type="text" name="referralCode" id="referralCode" tabindex="1" class="form-control" placeholder="refferal code (optional)"  value="<?= htmlspecialchars($_GET['ref'] ?? '') ?>">
+											<span id="errReferralCode" class="text-danger"></span>
 										</div>
 										<div class="form-group">
 											<label class="icon-lp"><i class="fa fa-key"></i></label>

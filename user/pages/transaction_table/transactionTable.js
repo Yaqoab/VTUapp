@@ -79,7 +79,7 @@ const sendRequest = async (method, endPoint, data = null) => {
      data.forEach((trans)=>{
        container.innerHTML +=`
             <div class="col-md-6 mx-auto mb-2 p-0 ">  
-            <a href="index.php?page=pages/transac_history/transactions&catname=${trans.category}&ref=${trans.reference}" class="card-link bt-1">
+            <a href="index.php?page=pages/transac_history/transactions&catname=${trans.category}&uId=${trans.user_id}&ref=${trans.reference}" class="card-link bt-1">
                 <div class="card transaction-card">
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <div>
