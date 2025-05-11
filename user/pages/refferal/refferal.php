@@ -11,14 +11,20 @@
     $referralURL .= "://$_SERVER[HTTP_HOST]/vtuApp/register.php?referral=$user[referral_code]";
 
     $get_referrals=new Actions;
-    // $refferrals=$get_referrals->select("referrals","*","referrer_id=$userId");
-    $referrals=$get_referrals->count(
-        "referrals",
-        "*",
-        "referrer_id ='$userId'"
-      );
 
-    
+    $ref_count=$get_referrals->count("referrals","*", "referrer_id ='$userId'");
+
+        // Get total commission
+    $referrals = $get_referrals->select("referrals", "*", "referrer_id = '$userId'", "fetchAll");
+    $total_commission = 0;
+    foreach ($referrals as $ref) {
+        $total_commission += $ref['commission'] ?? 0;
+    }
+   
+    $get_referrals->join('users u','INNER JOIN','u.user_id = r.referee_id ');
+    $referrals_list = $get_referrals->select('referrals r','r.*, u.username, u.phone',"r.referrer_id= '$userId'","fetchAll");
+   
+
 ?>
 <head>
     <style>
@@ -72,11 +78,8 @@
     <div class="container">
     
         <div class="text-center" id="referral-link-div">
-           <div class="referrals rounded">
-              <h5 class="text-left p-1">Your referrals <span class="rounded-circle bg-white"><?= $referrals ?></span></h5>
-    </div>
-            <h4>Your Referral Link</h4>
-            <p>Copy this link and reffer it to your friends and family you will get 2% bonus of his first deposit</p>
+            <h4>Referral Link</h4>
+            <p>Copy this link and reffer it to your friends and family you will get 2% bonus on deposit</p>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" id="referral-link" value="<?= $referralURL ?>" readonly>
                 <div class="input-group-append">
@@ -97,9 +100,49 @@
                 <img  src="./../images/x.twitter.png" class="rounded-circle image-icons" alt="Twitter Share">
             </a>
         </div>
+
+        <div class="referrals-info p-3">
+        <div class="container">
+          <div class="row p-1 balancefontsize">
+              <div class="col-sm-4">
+                  <span> Total Referrals <span class="rounded-circle bg-white"><?= $ref_count ?></span></span>
+              </div>
+              <div class="col-sm-4">
+                  <span>Total commission <span class="rounded-circle bg-white"><?= $total_commission ?></span></span>
+              </div>
+            </div>
+        </div>
+        </div>
         </div>
     </div>
     
+    <div class="container my-4">
+  <h4 class="mb-3 text-center">My Referrals list</h4>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle text-center">
+      <thead class="table-dark">
+        <tr>
+            <th>#</th>
+          <th>Referee Name</th>
+          <th>Phone</th>
+          <th>Commission</th>
+          <th>Referred On</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($referrals_list as $index => $ref): ?>
+          <tr>
+            <td><?= $index + 1 ?></td>
+            <td><?= $ref['username'] ?></td>
+            <td><?= htmlspecialchars($ref['phone']) ?></td>
+            <td>₦<?= number_format($ref['commission'], 2) ?></td>
+            <td><?= date('M d, Y', strtotime($ref['referral_date'])) ?></td>
+          </tr>
+        <?php endforeach ; ?>
+      </tbody>
+    </table>
+  </div>
+</div>
 
 
 </div>

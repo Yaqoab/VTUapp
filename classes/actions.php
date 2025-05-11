@@ -56,7 +56,7 @@ public function update($table, $data, $condition) {
 
   public function select($table,$column='*',$condition='',$fetchMode='fetch'){
     try {
-        // RAWQUERY na nufin hada columns da condition a wuri daya abar sauran argument din empty
+    //   RAW_QUERY na nufin kayi nomarl query ba tare da kayi amfani da columns ba
         $sql = $table === 'RAW_QUERY' ? $column : "SELECT $column FROM $table";
 
         if (!empty($this->joins) && $table !== 'RAW_QUERY') {
@@ -134,6 +134,7 @@ public function update($table, $data, $condition) {
             $this->db=null;
         }
     }
+
     public function validatePhoneNumber($phoneNumber, $networkId) {
         // Remove any non-digit characters
         $cleanedNumber = preg_replace('/\D/', '', $phoneNumber);

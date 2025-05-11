@@ -1,6 +1,9 @@
 <head>
 <title>settings</title>
 <style>
+   .footernavbar{
+        display: none;
+    }
     .more .column div{
       border: none;
     }
