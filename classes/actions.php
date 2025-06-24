@@ -122,12 +122,34 @@ public function update($table, $data, $condition) {
         return false;
     }
   }
-  public function checkLogin($id,$role,$url){
-     if(isset($_SESSION[$id]) && $_SESSION[$id] != "" && $_SESSION['vtu_role']=$role) {
-   }  else { 
-    return header('location:'.$url);
-   } 
-     }
+//   public function checkLogin($id,$role,$url){
+//      if(isset($_SESSION[$id]) && $_SESSION[$id] != "" && $_SESSION['vtu_role']=$role) {
+//    }  else { 
+//     return header('location:'.$url);
+//    } 
+//      }
+public function checkLogin($id, $role, $url) {
+    // Make sure session is started
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // Check if session exists and role matches
+    if (
+        isset($_SESSION[$id]) && 
+        !empty($_SESSION[$id]) &&
+        isset($_SESSION['vtu_role']) &&
+        $_SESSION['vtu_role'] === $role
+    ) {
+        // User is logged in with correct role — allow access
+        return true;
+    } else {
+        // Redirect if not authorized
+        header('Location: ' . $url);
+        exit;
+    }
+}
+
 
      public function closeConnection() {
         if ($this->db) {

@@ -18,39 +18,6 @@ class OurServices extends DomManipulator {
     return this.elementById('loading');
   }
   // Reference for making HTTP request or sending data
-
-
-  // sendAndRequest = (endPoint, method, data) => {
-  //   return new Promise((resolve, reject) => {
-  //     const http = new XMLHttpRequest();
-  //     http.open(method, endPoint, true);
-
-  //   http.addEventListener("load", () => {
-  //       if (http.readyState === 4) {
-  //             if (http.status === 200) {
-  //               resolve(JSON.parse(http.responseText));
-  //             } else {
-  //               reject({ error: `Error occurred: (${http.statusText})` });
-  //             }
-  //       } else {
-  //         reject({ error: `Error occurred: (${http.statusText})` });
-  //       }
-  //   });
-
-  //     method = method.toLowerCase();
-  //     if (method === "post") {
-  //       http.setRequestHeader("Accept", "application/json");
-  //       http.send(data);
-  //     }
-  //     if (method === "get") {
-  //       http.setRequestHeader("Accept", "application/json");
-  //       http.send();
-  //     }
-  //   });
-  // };
-
-
-
   
   sendRequest = async (method, endPoint, data = null) => {
     const defaultHeaders = {

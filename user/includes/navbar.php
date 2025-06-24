@@ -28,6 +28,12 @@
         top: -12%;
         border-radius: 50%;
   }
+  @media(max-width: 700px){ 
+
+  #mySidenav{
+    display: none;
+  }
+  }
 </style>
 <div id="mySidenav" class="sidenav" >
 <ul class="nav flex-column sidebar-nav fo menu" style="font-size: 20px">
@@ -75,13 +81,6 @@
         </ul>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">  
-            <!-- <div class="btn-group nav-link">
-               <a href="index.php?page=pages/notification/notification" class="text-white">
-                <i class="fa-solid fa-bell float-left position-relative">
-                  <span class="position-absolute"><?php  //echo $count; ?></span>
-                </i>
-              </a>
-              </div> -->
               <div class="btn-group nav-link ">
                   <a href="index.php?page=pages/notification/notification" class="text-white position-relative">
                     <i class="fa-solid fa-bell float-left">

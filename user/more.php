@@ -22,7 +22,7 @@ $checkLog->checkLogin('vtu_user_id','user','../login.php');
             </a>
           </div>
           <div>
-            <a href="#">
+            <a href="index.php?page=pages/pricing">
                 <i class="fa-solid fa-money-bill mr-2"></i>
                 <span>Pricing</span>
                 <i class="fa-solid fa-angle-right float-right"></i>

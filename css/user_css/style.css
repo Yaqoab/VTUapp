@@ -73,7 +73,8 @@ height: 100%;
     text-align: center;
     border: 1px solid #ccf8f4;
     border-radius: 6px;
-    background-color:#faf7f7;
+    /* background-color:#faf7f7; */
+    background-color: #eef4f8;
   }
   .services a{
     font-size:large;
@@ -83,6 +84,19 @@ height: 100%;
   .services .row div{
     margin-bottom: 10px;
     border-radius: 6px;
+  }
+  .data-info .row{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 5px;
+    margin-bottom: 60px;
+  } 
+  .data-info> .container> .row >div{
+    background-color: #eef4f8;
+    padding: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccf8f4;
+    color: #0e615a;
   }
  
 /* ----------------------MORE PAGE STYLE---------------------- */

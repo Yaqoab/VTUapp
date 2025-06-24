@@ -3,11 +3,7 @@ session_start();
   require_once "../classes/actions.php";
   $checkLog=new Actions();
   $checkLog->checkLogin('vtu_user_id','user','../login.php');
-  
- // echo $_SESSION['vtu_user_id']."</br>";
- // echo $_SESSION['vtu_email']."</br>";
- // echo $_SESSION['vtu_user_name']."</br>";
- // echo $_SESSION['vtu_role']."</br>";
+
  ?>
  <!DOCTYPE html>
  <html>

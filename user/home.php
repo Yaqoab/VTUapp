@@ -1,3 +1,9 @@
+<style>
+    .referrals{
+    background-color:  #7f8d88;
+    width: 150px;
+   }
+</style>
 <div class=""><?php include "includes/navbar.php" ?></div>
 <div id="main" class="mt-5">
      <div class="balance p-3">
@@ -22,7 +28,7 @@
             </div>
      </div>
       </div>
-      <div class="services mt-4">
+      <div class="services mt-4 mb-4">
         <div class="container">
           <!-- <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
           <span class="sr-only">Loading...</span> -->
@@ -62,8 +68,29 @@
              </div>
         </div>
       </div>
-      <div class="anouncement">
-         <h5 class="p-2 text-center">anouncement</h5>
+      <div class="data">
+         <div class="data-info">
+        <div class="container">
+          <div class="row p-1 balancefontsize">
+          <div class="col-md-4 text-center">
+                  <div>Total data bought</div>
+                  <div>200GB</div>
+              </div>
+              <div class="col-md-4 text-center">
+                  <div>Data bought today</div>
+                  <div>4GB</div>
+              </div>
+              <div class="col-md-4 text-center">
+                  <div>Data bought this week </div>
+                  <div>6GB</div>
+              </div>
+              <div class="col-md-4 text-center">
+                  <div>Data bought this month </div>
+                  <div>20GB</div>
+              </div>
+            </div>
+        </div>
+        </div>
       </div>
    	</div>
     <script>
