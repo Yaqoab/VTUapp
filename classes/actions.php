@@ -117,17 +117,11 @@ public function update($table, $data, $condition) {
         $stmt->execute();
         return true; 
     } catch (PDOException $e) {
-        // Handle the exception if needed
         echo "Error: " . $e->getMessage();
         return false;
     }
   }
-//   public function checkLogin($id,$role,$url){
-//      if(isset($_SESSION[$id]) && $_SESSION[$id] != "" && $_SESSION['vtu_role']=$role) {
-//    }  else { 
-//     return header('location:'.$url);
-//    } 
-//      }
+
 public function checkLogin($id, $role, $url) {
     // Make sure session is started
     if (session_status() == PHP_SESSION_NONE) {

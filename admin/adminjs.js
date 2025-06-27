@@ -36,6 +36,13 @@ class Admin{
       elementById(id){
         return document.getElementById(id);
       }
+      querySelector(selector) {
+        return document.querySelector(selector);
+      }
+      querySelectorAll(selector) {
+        return document.querySelectorAll(selector);
+      }
+            
       loader(){
         return this.elementById('loading');
       }
@@ -70,29 +77,31 @@ class Admin{
           });
       }
 
-           // Delete user using sendRequest
-          //  async  deleteUser(userId) {
-          //   if (!confirm("Delete user and Monnify account?")) return;
+          async  delete(table,userId,column) {
+              if (!confirm("are you agree to delete?")) return;
+            
+              const formData = new FormData();
+              formData.append("id", userId);
+              formData.append('column', column)
+              formData.append('table', table);
+              try {
+                const res = await admin.sendRequest("POST", "./deleteProcess.php", formData);
+                if (res.status === "success") {
+                  alert(res.message);
+                  document.querySelector(`#user-row-${userId}`)?.remove();
+                  window.location.reload();
+                } else {
+                  alert("Error: " + res.message);
+                  console.log(res);
+                }
+              } catch (err) {
+                alert("Unexpected error.");
+                console.error(err);
+              }
+            }
           
-          //   const formData = new FormData();
-          //   formData.append("id", userId);
-          
-          //   try {
-          //     const res = await admin.sendRequest("POST", "./delete.php", formData);
-          //     if (res.status === "success") {
-          //       alert(res.message);
-          //       document.querySelector(`#user-row-${userId}`)?.remove();
-          //     } else {
-          //       alert("Error: " + res.message);
-          //       console.log(res); // show full Monnify error
-          //     }
-          //   } catch (err) {
-          //     alert("Unexpected error.");
-          //     console.error(err);
-          //   }
-          // }
-          
-          
+                      //  ----------------open users---------------------
+
      async users(){
        const userscont = this.elementById("userstable");
        const form = this.elementById("editUserModal");
@@ -122,10 +131,10 @@ class Admin{
 
           }
           $('#usersTable').DataTable({
-            pageLength: 10,      // show 10 users per page
-            lengthChange: false, // hide the page size dropdown
-            ordering: true,      // enable column sorting
-            searching: true      // enable search box
+            pageLength: 10,     
+            lengthChange: false, 
+            ordering: true,     
+            searching: true 
           });
 
           // Make sure this is globally available
@@ -178,15 +187,138 @@ class Admin{
         } catch (error) {
           console.error(error);
         }
-      
-
 
       }
-  
+                  //  ----------------close userrs---------------------
+
+            //  ----------------open addPrice---------------------
+      addPriceData() {
+        const deletePlan = this.querySelectorAll(".deletePlan-btn");
+        const deleteprice = this.querySelectorAll('.deleteprice-btn')
+        const priceTable = this.elementById('priceTable')
+    
+        deletePlan.forEach(button => {
+          button.addEventListener("click", () => {
+            const planId = button.getAttribute("data-id");
+            this.delete('dataplantype',planId,'plan_id'); // call reusable delete method
+          });
+        });
+
+       deleteprice.forEach(btn =>{
+        btn.addEventListener('click', () =>{
+          const priceId = btn.getAttribute("price-id");
+          this.delete("datapricelist",priceId,'id')
+        })
+       });
+        document.getElementById('planForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+        
+          const formData = new FormData(e.target); // use e.target instead of `this`
+          const url = './dataPrice/processPlanName.php';
+          try {
+            const result = await this.sendRequest("POST", url, formData);
+            console.log(result);
+            alert(result.message);
+            if (result.status === 'success') {
+              location.reload();
+            }
+          } catch (err) {
+            alert('An error occurred while saving.');
+            console.error(err);
+          
+          }
+        });
+        
+        this.elementById('priceForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const formData = new FormData(e.target);
+        
+          try {
+          const result = await this.sendRequest("POST", './dataPrice/processDataPrice.php', formData);
+        
+            console.log(result);
+            alert(result.message);
+        
+            if (result.status === 'success') {
+              location.reload();
+            }
+          } catch (err) {
+            alert('An error occurred while saving.');
+            console.error(err);
+          }
+        });
+        
+        $('#priceTable').DataTable({
+          pageLength: 10,     
+          lengthChange: false, 
+          ordering: true,     
+          searching: true 
+        });
+
+       
+      }
+      openPlanModal() {
+        const modal = new bootstrap.Modal( this.elementById('planModal'));
       
+        this.elementById('planForm').reset();
+        modal.show();
+      }
+      openPriceModal(price = null) {
+        const modal = new bootstrap.Modal( this.elementById('priceModal'));
+      
+        this.elementById('priceForm').reset();
+        
+       
+        this.elementById('id').value = price?.id || '';
+        this.elementById('data_id').value = price?.data_id || '';
+        this.elementById('plan_id').value = price?.plan_id || '';
+        this.elementById('Amount').value = price?.Amount || '';
+        this.elementById('size').value = price?.size || '';
+        this.elementById('Validity').value = price?.Validity || '';
+      
+        modal.show();
+      }
+      
+      
+            //  ----------------close addPrice---------------------
+            
+            //  ----------------open tvcble---------------------
+
+      tvCables(){
+        document.getElementById('cableForm').addEventListener('submit', async function (e) {
+          e.preventDefault();
+          const formData = new FormData(this);
+    
+          try {
+            const result = await this.sendRequest('POST','./TvCables/processtv.php',formData);
+            alert(result.message);
+            if (result.status === 'success') location.reload();
+          } catch (err) {
+            console.error(err);
+            alert('An error occurred while saving.');
+          }
+        });
+      }
+      openCableModal(tv = null) {
+        const modal = new bootstrap.Modal(this.elementById('cableModal'));
+        this.elementById('cableForm').reset();
+    
+        this.elementById('cable_id').value = tv?.id || '';
+        this.elementById('planName').value = tv?.planName || '';
+        this.elementById('amount').value = tv?.amount || '';
+        this.elementById('cableID').value = tv?.cableID || '';
+        this.elementById('cablePlanID').value = tv?.cablePlanID || '';
+    
+        modal.show();
+      }
+    
+
+
+                  //  ----------------close tvcables---------------------
+
       
 }
 const admin = new Admin();
-
+    
 window.admin = admin;
 

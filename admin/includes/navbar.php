@@ -47,6 +47,9 @@
     <a class="nav-link" href="index.php?page=dataPrice/addPrice">Add data price</a>
   </li>
   <li class="nav-item">
+    <a class="nav-link" href="index.php?page=TvCables/tvcables">Add tv cables price</a>
+  </li>
+  <li class="nav-item">
     <a class="nav-link" href="index.php?page=pages/settings/settings">Settings</a>
   </li>
   <li class="nav-item">

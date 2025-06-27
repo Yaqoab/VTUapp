@@ -86,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'new_balance' => $newBalance,
             'updated_by' => $updatedBy
         ]);
+        $getUsers->closeConnection();
         echo json_encode([
             'status' => 'success',
             'new_balance' => $newBalance,

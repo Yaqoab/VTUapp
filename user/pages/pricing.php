@@ -1,3 +1,20 @@
+<?php 
+    require_once '../db_connect.php';
+    require_once "../classes/actions.php";
+  $getPlan =new Actions();
+
+$query ="SELECT 
+p.id, p.data_id, p.Amount, p.size, p.Validity,
+d.Plan_name,
+n.name AS network_name
+FROM datapricelist p
+INNER JOIN dataplantype d ON d.plan_id = p.plan_id
+INNER JOIN networks_list n ON n.networks_id = d.networks_id ORDER BY network_name
+";
+$priceList = $getPlan->select('RAW_QUERY', $query, '', 'fetchAll');
+
+$getPlan->closeConnection();
+?>
 <head>
     <title>Pricing</title>
     <style>
@@ -17,117 +34,35 @@
 
     <div class="container mt-5" id="container">
     <div class="container my-4">
-            <h4 class="mb-3 text-center">MTN Data</h4>
-            <div class="table-responsive">
-                <table class="table table-bordered table-striped align-middle text-center">
-                <thead class="table-primary" style="background:#FFEB3B">
-                    <tr>
-                    <th>plan type</th>
-                    <th>AMOUNT</th>
-                    <th>SIZE</th>
-                    <th>VALIDITY</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>SME</td>
-                        <td>750</td>
-                        <td>1GB</td>
-                        <td>30 days</td>
-                    </tr>
-                    <tr>
-                        <td>SME</td>
-                        <td>1500</td>
-                        <td>2GB</td>
-                        <td>30 days</td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
-
-            <h4 class="mb-3 text-center">AIRTEL</h4>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped align-middle text-center">
-            <thead class="table-primary" style="background:#e92a14">
-                <tr>
-                <th>plan type</th>
-                <th>AMOUNT</th>
-                <th>SIZE</th>
-                <th>VALIDITY</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>SME</td>
-                    <td>750</td>
-                    <td>1GB</td>
-                    <td>30 days</td>
-                </tr>
-                <tr>
-                    <td>SME</td>
-                    <td>1500</td>
-                    <td>2GB</td>
-                    <td>30 days</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-         
-        <h4 class="mb-3 text-center">GLO</h4>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped align-middle text-center">
-            <thead class="table-primary" style="background:#5bbd2a">
-                <tr>
-                <th>plan type</th>
-                <th>AMOUNT</th>
-                <th>SIZE</th>
-                <th>VALIDITY</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>SME</td>
-                    <td>750</td>
-                    <td>1GB</td>
-                    <td>30 days</td>
-                </tr>
-                <tr>
-                    <td>SME</td>
-                    <td>1500</td>
-                    <td>2GB</td>
-                    <td>30 days</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
-
-        <h4 class="mb-3 text-center">9MOBILE</h4>
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped align-middle text-center">
-            <thead class="table-primary" style="background:#cced4c">
-                <tr>
-                <th>plan type</th>
-                <th>AMOUNT</th>
-                <th>SIZE</th>
-                <th>VALIDITY</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>SME</td>
-                    <td>750</td>
-                    <td>1GB</td>
-                    <td>30 days</td>
-                </tr>
-                <tr>
-                    <td>SME</td>
-                    <td>1500</td>
-                    <td>2GB</td>
-                    <td>30 days</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
+    <div class="table-responsive mt-3">
+  <h4 class="mb-3 text-center">Data plan list</h4>
+  <table id="priceTable" class="table table-bordered table-striped align-middle text-center">
+    <thead class="table-primary bg-grey">
+      <tr>
+        <th>#</th>
+        <th>Network Name</th>
+        <th>Plan Name</th>
+        <th>Data ID</th>
+        <th>Amount (₦)</th>
+        <th>Size</th>
+        <th>Validity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($priceList as $index => $price): ?>
+        <tr id="price-row-<?= $price['id'] ?>">
+          <td><?= $index + 1 ?></td>
+          <td><?= $price['network_name'] ?></td>
+          <td><?= $price['Plan_name'] ?></td>
+          <td><?= $price['data_id'] ?></td>
+          <td><?= $price['Amount'] ?></td>
+          <td><?= $price['size'] ?></td>
+          <td><?= $price['Validity'] ?></td>
+        </tr>
+      <?php endforeach ?>
+    </tbody>
+  </table>
+</div>
          
     </div>
     </div>
