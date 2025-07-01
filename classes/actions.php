@@ -122,27 +122,29 @@ public function update($table, $data, $condition) {
     }
   }
 
-public function checkLogin($id, $role, $url) {
-    // Make sure session is started
+
+public function checkLogin($id, $allowedRoles, $url) {
     if (session_status() == PHP_SESSION_NONE) {
         session_start();
     }
 
-    // Check if session exists and role matches
+    if (!is_array($allowedRoles)) {
+        $allowedRoles = [$allowedRoles];
+    }
+
     if (
-        isset($_SESSION[$id]) && 
+        isset($_SESSION[$id]) &&
         !empty($_SESSION[$id]) &&
         isset($_SESSION['vtu_role']) &&
-        $_SESSION['vtu_role'] === $role
+        in_array($_SESSION['vtu_role'], $allowedRoles)
     ) {
-        // User is logged in with correct role — allow access
-        return true;
+        return true; // Authorized
     } else {
-        // Redirect if not authorized
         header('Location: ' . $url);
         exit;
     }
 }
+
 
 
      public function closeConnection() {
@@ -286,15 +288,10 @@ class Validation extends Actions{
      }
      private function validatePassword(){
         $Password=$this->data['unHashPassword'];
-        // $uppercase=preg_match('@[A-Z]@', $Password);
-        // $lowercase=preg_match('@[a-z]@', $Password);
         $numbers=preg_match('@[0-9]@', $Password);
         $specialChars=preg_match('@[^\w]@', $Password);
         //pass hash
             $pass=$Password;  
-            // $pwsalt=substr(md5(time()),0, PW_SALT_LENGTH);
-            // $pwsalt = substr(md5(time()), 0, PW_SALT_LENGTH);
-            // $pwHash=$pwsalt.sha1($pwsalt.$pass);
              $pwHash=password_hash($pass, PASSWORD_DEFAULT);
             if (empty($Password)) {
                 $this->addError('password','empty password');

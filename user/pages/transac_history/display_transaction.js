@@ -84,38 +84,44 @@ const sendRequest = async (method, endPoint, data = null) => {
             </div> `;
                 return;
     }if (res.category === "transfer") {
-              function maskPhone(phone) {
-          if (phone.length !== 11) return phone;
+      const data = res.details;
+  function maskPhone(phone) {
+    if (!phone || phone.length !== 11) return phone;
+    return phone.slice(0, 4) + '****' + phone.slice(-3);
+  }
 
-          // Keep first 4 and last 3 digits, mask the middle
-          return phone.slice(0, 4) + '****' + phone.slice(-3);
-        }
-            const isSender  = data.sender_id == id;
-            const amountVal = isSender ? `- ₦${data.amount}` :`+ ₦${data.amount}`;
-            const title     = isSender ? `Sent` :`Recieved`;
-            
-            const senderAccMasked = isSender ? data.senderAcc : maskPhone(data.senderAcc);
-            const receiverAccMasked = isSender ? maskPhone(data.receiverAcc) : data.receiverAcc;
-            container.innerHTML =   `
-            <div class="w-100 position-relative">
-            <span class="h4 card-title">${res.category} ${title}</span>
-            <span class="card-text position-absolute" style="right:0" id="amount">${amountVal}</span>
-          </div>
-          <hr>
-          <h5 class="card-title">Transaction Details</h5>
-          <p class="card-text"><strong>Status:</strong> <span>${data.status}</span></p>
-          <p class="card-text"><strong>Sender:</strong> <span>${data.senderName}</span></p>
-          <p class="card-text"><strong>Reciever:</strong> <span>${data.receiverName}</span></p>
-          <p class="card-text"><strong>Sender account:</strong> <span>${senderAccMasked}</span></p>
-          <p class="card-text"><strong>Reciever account:</strong> <span>${receiverAccMasked}</span></p>
-          <p class="card-text"><strong>Remark:</strong> <span>${data.remark}</span></p>
-          <p class="card-text"><strong>Date:</strong> <span>${data.date}</span></p>
-          <p class="card-text"><strong>ref:</strong> <span>${data.reference}</span></p>
-          </div>
-          <div class="card-footer text-muted">
-              Thank you for using our service!
-          </div>`;
-              return;
+  const isSender = typeof id !== 'undefined' && data.sender_id == id;
+const amountVal = isSender ? `- ₦${data.amount}` : `+ ₦${data.amount}`;
+const title = isSender ? `Sent` : `Received`;
+const senderAccMasked = isSender ? data.senderAcc : maskPhone(data.senderAcc);
+const receiverAccMasked = isSender ? maskPhone(data.receiverAcc) : data.receiverAcc;
+
+  if (!data) {
+    container.innerHTML = `<p class="text-danger">Transaction data not found.</p>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="w-100 position-relative">
+      <span class="h4 card-title">${res.category} ${title}</span>
+      <span class="card-text position-absolute" style="right:0" id="amount">${amountVal}</span>
+    </div>
+    <hr>
+    <h5 class="card-title">Transaction Details</h5>
+    <p class="card-text"><strong>Status:</strong> <span>${data.status}</span></p>
+    <p class="card-text"><strong>Sender Name:</strong> <span>${data.senderName}</span></p>
+    <p class="card-text"><strong>Sender Account:</strong> <span>${senderAccMasked}</span></p>
+    <p class="card-text"><strong>Receiver Name:</strong> <span>${data.receiverName}</span></p>
+    <p class="card-text"><strong>Receiver Account:</strong> <span>${receiverAccMasked}</span></p>
+    <p class="card-text"><strong>Remark:</strong> <span>${data.remark}</span></p>
+    <p class="card-text"><strong>Date:</strong> <span>${data.date}</span></p>
+    <p class="card-text"><strong>Reference:</strong> <span>${data.reference}</span></p>
+    <div class="card-footer text-muted mt-3">
+      This record is visible to admin only.
+    </div>
+  `;
+return;
+      
     }if (res.category === "electricity") {
             container.innerHTML =   `
             <div class="w-100 position-relative">

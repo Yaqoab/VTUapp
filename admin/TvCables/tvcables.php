@@ -15,41 +15,43 @@ $getTv->closeConnection();
 <body>
 <div id="main" class="mt-5">
 <div class="container my-4">
-  <h4 class="mb-3 text-center">TV cable list</h4>
-  <div class="table-responsive">
-    <table id="tv" class="table table-bordered table-striped align-middle text-center">
-      <thead class="table-dark">
-        <tr>
-          <th>Cable name</th>
-          <th>Cable plan ID</th>
-        </tr>
-      </thead>
-      <tbody id="TvCables">
-         <tr>
-           <th>GOTV</th>
-           <th>1</th>
-         </tr>
-         <tr>
-           <th>DSTV</th>
-           <th>2</th>
-         </tr>
-         <tr>
-           <th>STARTINE</th>
-           <th>3</th>
-         </tr>
-      </tbody>
-    </table>
-  </div>
+<h4 class="mb-3 text-center">Cable Plans</h4>
+<div class="table-responsive">
+  <table id="" class="table table-bordered table-striped align-middle text-center">
+    <thead class="table-dark">
+      <tr>
+        <th>Cable anme</th>
+        <th>Cable ID</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>GOTV</td>
+        <td>1</td>
+      </tr>
+      <tr>
+        <td>DSTV</td>
+        <td>2</td>
+      </tr>
+      <tr>
+        <td>STARTIMES</td>
+        <td>1</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 
   <h4 class="mb-3 text-center">Cable Plan List</h4>
 <div class="table-responsive">
-  <button class="btn btn-primary mb-3" onclick="admin.openCableModal()">Add Cable Plan</button>
+  <button class="btn btn-primary mb-3" onclick="admin.openCableModal()">+ Add Cable Plan</button>
 
   <table id="tv" class="table table-bordered table-striped align-middle text-center">
     <thead class="table-dark">
       <tr>
         <th>#</th>
-        <th>Cable Plan Name</th>
+        <th>plan name</th>
         <th>Amount</th>
         <th>Cable ID</th>
         <th>Cable Plan ID</th>
@@ -98,6 +100,15 @@ $getTv->closeConnection();
         </div>
         <div class="modal-body">
           <input type="hidden" name="id" id="cable_id">
+          <div class="form-group mb-2">
+            <label for="cableID">Cable ID</label>
+            <select class="form-control" id="cableID" name="cableID" required>
+                <option value="">Select Cable</option>
+                <option value="1">GOTV</option>
+                <option value="2">DSTV</option>
+                <option value="3">STARTIMES</option>
+            </select>
+            </div>
 
           <div class="form-group mb-2">
             <label for="planName">Plan Name</label>
@@ -106,11 +117,6 @@ $getTv->closeConnection();
           <div class="form-group mb-2">
             <label for="amount">Amount</label>
             <input type="amount" class="form-control" id="amount" name="amount" required>
-          </div>
-
-          <div class="form-group mb-2">
-            <label for="cableID">Cable ID</label>
-            <input type="text" class="form-control" id="cableID" name="cableID" required>
           </div>
 
           <div class="form-group mb-2">

@@ -26,7 +26,7 @@ $data = [
 
 if (!empty($id)) {
     // Update
-    $updated = $actions->update('cableplans', $data, "id = '$id'");
+    $updated = $actions->update('cable_plan_list', $data, "id = '$id'");
     if ($updated) {
         echo json_encode(['status' => 'success', 'message' => 'Cable plan updated successfully.']);
     } else {
@@ -34,7 +34,7 @@ if (!empty($id)) {
     }
 } else {
     // Insert
-    $inserted = $actions->insert('cableplans', $data);
+    $inserted = $actions->addDataToDatabase('cable_plan_list', $data);
     if ($inserted) {
         echo json_encode(['status' => 'success', 'message' => 'Cable plan added successfully.']);
     } else {

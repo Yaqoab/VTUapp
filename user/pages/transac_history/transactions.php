@@ -30,6 +30,6 @@
 </div>
 <script src="./../user/pages/transac_history/display_transaction.js"></script>
 <script>
-    const id=<?= $user['user_id'] ?>;
+    
 
 </script>

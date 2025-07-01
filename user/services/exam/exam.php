@@ -87,7 +87,7 @@
                                    
                               <div class="amount-con position-relative">
                                         <div class="input-group w-100 mt-3">
-                                            <input type="text" class="form-control" name="amount" id="amount" value="0"  placeholder="amount" autofocus >
+                                            <input type="text" class="form-control" name="amount" id="amount" value="0"  placeholder="amount" autofocus readonly>
                                         </div>
                                     </div>
                                     <span id="errAmount" class="text-danger"></span>

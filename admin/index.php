@@ -2,7 +2,7 @@
  session_start();
  require_once "../classes/actions.php";
     $checkLog=new Actions();
-    $checkLog->checkLogin('vtu_admin_id','admin','../admin/adminlogin.php');
+    $checkLog->checkLogin('vtu_admin_id', ['admin', 'super_admin'],'../admin/adminlogin.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">

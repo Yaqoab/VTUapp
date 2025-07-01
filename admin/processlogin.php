@@ -24,7 +24,7 @@
                 $_SESSION['authenticated_admin']=true;
                 $_SESSION['vtu_admin_id']= $rows['id'];
                 $_SESSION['vtu_admin_name']= $rows['username'];
-                $_SESSION['vtu_role'] = 'admin';
+                $_SESSION['vtu_role'] = $rows['role'];
 
           $msg =[
             "status"=>"success",

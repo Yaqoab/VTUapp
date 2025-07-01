@@ -267,11 +267,10 @@ class Admin{
         const modal = new bootstrap.Modal( this.elementById('priceModal'));
       
         this.elementById('priceForm').reset();
-        
-       
+
         this.elementById('id').value = price?.id || '';
         this.elementById('data_id').value = price?.data_id || '';
-        this.elementById('plan_id').value = price?.plan_id || '';
+        this.elementById('plan_id').value = `${price?.plan_id || ''}`;
         this.elementById('Amount').value = price?.Amount || '';
         this.elementById('size').value = price?.size || '';
         this.elementById('Validity').value = price?.Validity || '';
@@ -285,9 +284,16 @@ class Admin{
             //  ----------------open tvcble---------------------
 
       tvCables(){
-        document.getElementById('cableForm').addEventListener('submit', async function (e) {
+        const deletePlan = this.querySelectorAll('.delete-btn');
+        deletePlan.forEach(button => {
+          button.addEventListener("click", () => {
+            const planId = button.getAttribute("data-id");
+            this.delete('cable_plan_list',planId,'id'); // call reusable delete method
+          });
+        });
+        document.getElementById('cableForm').addEventListener('submit', async (e)=> {
           e.preventDefault();
-          const formData = new FormData(this);
+          const formData = new FormData(e.target);
     
           try {
             const result = await this.sendRequest('POST','./TvCables/processtv.php',formData);
@@ -316,7 +322,81 @@ class Admin{
 
                   //  ----------------close tvcables---------------------
 
+                //  ----------------- update profile----------------------
+      updteProfile(){
+          document.getElementById('adminUpdateForm').addEventListener('submit', async (e)=> {
+            e.preventDefault();
+            const formData = new FormData(e.target);
       
+            try {
+              const result = await this.sendRequest('POST','./updateProfile/processUpdate.php',formData);
+              alert(result.message);
+              if (result.status === 'success') location.reload();
+            } catch (err) {
+              console.error(err);
+              alert('An error occurred while saving.');
+            }
+          });
+      }
+              //  ----------------- update profile----------------------
+              
+               //  ----------------- open addSdmin----------------------
+        addAdmin(){
+          const deleteBtn = this.querySelectorAll('.delete-btn');
+            deleteBtn.forEach(btn => {
+              btn.addEventListener('click', ()=>{
+                const adminId = btn.getAttribute("data-id");
+                this.delete('admin',adminId,'id'); 
+              });
+            });
+          this.elementById("adminForm").addEventListener('submit',async (e)=>{
+             e.preventDefault();
+             const formData = new FormData(e.target);
+
+             try {
+              const result = await this.sendRequest('POST','./addAdmins/processAdAdmins.php',formData);
+              alert(result.message);
+              if (result.status === 'success') location.reload();
+             } catch (error) {
+              console.error(error);
+              alert('An error occurred while saving.');
+             }
+          });
+
+          document.getElementById('editRoleForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            try {
+              const result = await this.sendRequest('POST','./addAdmins/processEditAdmins.php',formData);
+              alert(result.message);
+              if (result.status === 'success') location.reload();
+             } catch (error) {
+              console.error(error);
+              alert('An error occurred while saving.');
+             }
+          });
+        }
+        openAdminModal(admin = null) {
+          const modal = new bootstrap.Modal(this.elementById('adminModal'));
+          this.elementById('adminForm').reset();
+        
+          this.elementById('admin_id').value = admin?.id || '';
+          this.elementById('username').value = admin?.username || '';
+          this.elementById('email').value = admin?.username || '';
+          this.elementById('role').value = admin?.role || 'admin';
+        
+          modal.show();
+        }
+        openEditRoleModal(admin) {
+          document.getElementById('editRoleId').value = admin.id;
+          document.getElementById('editRole').value = admin.role;
+        
+          const modal = new bootstrap.Modal(document.getElementById('editRoleModal'));
+          modal.show();
+        };
+        
+              //  ----------------- close addSdmin----------------------
+
 }
 const admin = new Admin();
     

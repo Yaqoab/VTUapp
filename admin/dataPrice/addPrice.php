@@ -12,7 +12,7 @@ $getPlan->join('networks_list n', 'INNER JOIN', 'n.networks_id = d.networks_id')
 
 $priceList = $getPlan->select(
   'datapricelist p',
-  'p.id,p.data_id, p.Amount, p.size, p.Validity, d.Plan_name, n.name AS network_name',
+  'p.id,p.data_id, p.Amount, p.size, p.Validity, d.Plan_name, n.name AS network_name,d.plan_id',
   '',
   'fetchAll'
 );
@@ -163,8 +163,11 @@ $getPlan->closeConnection();
             <select name="plan_id" id="plan_id" class="form-control" required>
               <option value="">Select Plan</option>
               <?php foreach ($planType as $plan): ?>
-                <option value="<?= $plan['plan_id'] ?>"><?= $plan['Plan_name'] ?> (<?= $plan['networks'] ?>)</option>
-              <?php endforeach; ?>
+                <option value="<?= $plan['plan_id'] ?>" 
+                <?= (isset($plan) && (string)$plan['plan_id'] === (string)$plan['plan_id']) ? 'selected' : '' ?>>
+                <?= $plan['Plan_name'] ?> (<?= $plan['networks'] ?>)
+              </option>
+                <?php endforeach; ?>
             </select>
           </div>
 

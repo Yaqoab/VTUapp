@@ -50,7 +50,13 @@
     <a class="nav-link" href="index.php?page=TvCables/tvcables">Add tv cables price</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="index.php?page=pages/settings/settings">Settings</a>
+    <a class="nav-link" href="index.php?page=addAdmins/addAdmins">Add admins</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="index.php?page=transactions/transactions">transactions</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="index.php?page=updateProfile/updateprofile">profile</a>
   </li>
   <li class="nav-item">
     <a class="nav-link" href="index.php?page=pages/benefitiaries/benefitiaries">Saved beneficiaries</a>
